@@ -54,13 +54,47 @@ module.exports = {
           connection.query(sql, values, function (error, results, fields) {
             if (error) {
               resultsNotFound["errorMessage"] = "emailID already exists.";
+              connection.release();
+              if (error) throw error;
               return res.send(resultsNotFound);
-            } else return res.send(resultsFound);
+            } else {
+              connection.release();
+              if (error) throw error;
+              return res.send(resultsFound);
+            }
   
             // When done with the connection, release it.
-            connection.release(); // Handle error after the release.
-            if (error) throw error; // Don't use the connection here, it has been returned to the pool.
+             // Handle error after the release.
+            //Don't use the connection here, it has been returned to the pool.
           });
         });
   },
+
+  setDev: function (req, res) {
+    pool.getConnection(function (err, connection) {
+      if (err) throw err; // not connected!
+      
+     // bcrypt.hash(req.body.inputPassword, saltRounds, function (err, hash) {
+        var sql = 'INSERT INTO tbldevelopers SET ?';
+        var values = { 'firstname': req.body.fname, 'middlename' : req.body.mname, 'lastname' : req.body.lname }
+        // Use the connection
+        connection.query(sql, values, function (error, results, fields) {
+          if (error) {
+            resultsNotFound["errorMessage"] = "emailID already exists.";
+            connection.release();
+            if (error) throw error;
+            return res.send(resultsNotFound);
+          } else {
+            connection.release();
+            if (error) throw error;
+            return res.send(resultsFound);
+          } 
+          
+          
+          // When done with the connection, release it.
+           // Handle error after the release.
+          //Don't use the connection here, it has been returned to the pool.
+        });
+      });
+},
 };

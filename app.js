@@ -46,5 +46,16 @@ app.post('/setFibonacci', jsonParser, function (req, res) {
     dbFunctions.setFibonacci(req,res);
 });
 
+app.post('/setDev', jsonParser, function (req, res) {
+    //if(valFunctions.checkInputDataNULL(req,res)) return false;
+    //if(valFunctions.checkInputDataQuality(req,res)) return false;
+    //if(valFunctions.checkJWTToken(req,res)) return false;
+    //if(valFunctions.checkUserAuthRole(req,res)) return false;
+
+    var dbFunctions = require('./models/connector');
+    dbFunctions.setDev(req,res);
+});
+
+
 app.use('/', (req, res) => res.send("Welcome Sample!"));
 app.listen(process.env.PORT, () => console.log('Port: ' + process.env.PORT));
